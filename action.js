@@ -2,6 +2,8 @@ const typeText = document.getElementById("typetext")
 const input = document.getElementById("input")
 const timer = document.getElementById("timer")
 const wpm = document.getElementById("wpm")
+const resetButton = document.getElementById("resetbutton");
+let wordsWritten = document.getElementById("wordswritten")
 
 
 const wordList = [
@@ -251,63 +253,90 @@ const wordList = [
     "your","yourself","youth","zero","zebra","zipper","zoo","zulu"
   ];
 
-  let textString = wordList[Math.floor(Math.random() * wordList.length - 1)]
-for (let i = 0; i < 10; i++) {
-    textString = textString + " " + wordList[Math.floor(Math.random() * wordList.length - 1)]
-}
-textString = textString.split(" ")
+  let textString;
+  const generateText = () => {
+    textString = wordList[Math.floor(Math.random() * wordList.length - 1)]
+    for (let i = 0; i < 10; i++) {
+        textString = textString + " " + wordList[Math.floor(Math.random() * wordList.length - 1)]
+    }
+    textString = textString.split(" ")
+    
+    typeText.innerHTML = textString.join(" ")
+  }
 
-let resetButton;
+  generateText()
+
 let i = 0;
 let score = 0;
-let time = 5;
+let time = 20;
 let totalWPM = 0;
-typeText.innerHTML = textString.join(" ")
 let timerRoll = false;
 
 
-input.addEventListener("keyup", (e) => {
-
-    if (timerRoll) {
+input.addEventListener("keydown", (e) => {
+    if (e.target.value.length < 1 || e.target.value === " ") {
+        e.target.value = ""
     } else {
-        intervalId = setInterval(() => {
-            if (time > 0) {
-                time = time - 1
-                timer.innerHTML = time.toString()
-                console.log("HI")
-            } else {
-                resetButton = document.createElement("button")
-                resetButton.innerHTML = "reset"
-                document.body.appendChild(resetButton)
-                clearInterval(intervalId)
-                console.log("yah")
-                let calculate = score * 2
-                wpm.innerHTML = calculate.toString()
-            }
-        }, 1000)
-    }
 
-    timerRoll = true;
+        let val = e.target.value;
 
-    if (e.target.value.includes(" ")) {
+        if (e.code === "Space") {
+            // Your existing code here
 
-        if (e.target.value.trim() === textString[i]) {
-            score++
-            textString[i] = "<span style='color: green'>" + textString[i] + "</span>"
+                e.target.value = ""
+                console.log(val)
+                console.log(textString[i])
+                if (val === textString[i]) {
+                   
+                    score++
+                    textString[i] = "<span style='color: green'>" + textString[i] + "</span>"
+                    
+                    console.log("CORRECT")
+                } else {
+                    textString[i] = "<span style='color: red'>" + textString[i] + "</span>"
+                    console.log("FALSE")
+                }
+                typeText.innerHTML = textString.join(" ");
+                i++
+                wordsWritten.innerHTML = wordsWritten.innerHTML + e.target.value
+              
             
-            console.log("CORRECT")
-        } else {
-            textString[i] = "<span style='color: red'>" + textString[i] + "</span>"
-            console.log("FALSE")
         }
-        typeText.innerHTML = textString.join(" ");
-        i++
-        e.target.value = ""  
+
+        if (timerRoll) {
+        } else {
+            intervalId = setInterval(() => {
+                if (time > 0) {
+                    time = time - 1
+                    timer.innerHTML = time.toString()
+                    console.log("HI")
+                } else {
+                    resetButton.setAttribute("style", "visibility: visible")
+                    clearInterval(intervalId)
+                    console.log("yah")
+                    let calculate = score * 2
+                    wpm.innerHTML = wpm.innerHTML + calculate.toString()
+                    e.target.value = ""  
+                }
+            }, 1000)
+        }
+    
+        timerRoll = true;
     }
 })
 
+
+
 resetButton.addEventListener("click", () => {
-    
+    console.log("ye")
+     i = 0;
+     score = 0;
+     time = 5;
+     totalWPM = 0;
+     timerRoll = false
+     wpm.innerHTML = "Total WPM: "
+     input.value = ""
+    generateText()
 })
 
 
