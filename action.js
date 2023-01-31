@@ -285,37 +285,39 @@ let timerRoll = false;
 
 
 input.addEventListener("keydown", (e) => {
-      let val = e.target.value;
 
-      if (e.code === "Space") {
-        e.target.value = "";
-        console.log("VAL", val)
-        console.log("INNERHTML", textString[i])
+      let val = e.target.value;
+        console.log(e.key)
+
+
+
+      if (e.key === " ") {
+        e.target.value = ""
+        e.preventDefault()
         if (val.trim() === textString[i]) {
           score++;
           textElements[i].setAttribute("style", "color:blue;")
           console.log("CORRECT");
         } else {
-            console.log("TEXTEL", textElements[i])
           textElements[i].setAttribute("style", "color:blue;")
           console.log("FALSE");
         }
-        e.target.value = "";
         i++;
       } else {
         if (e.key === "Backspace") {
             console.log("clicked")
             textElements[i].children[val.length -1].setAttribute("style", "color:black;")
-          } else
+          }
           if (e.key === textString[i][val.length]) {
             textElements[i].children[val.length].setAttribute("style", "color:green;")
           } else {
             textElements[i].children[val.length].setAttribute("style", "color:red;")
           }
-    
       }
+    
+      
 
-  
+
       if (timerRoll) {
       } else {
         intervalId = setInterval(() => {
@@ -325,7 +327,7 @@ input.addEventListener("keydown", (e) => {
           } else {
             resetButton.setAttribute("style", "visibility: visible");
             clearInterval(intervalId);
-            console.log("yah");
+    
             let calculate = score * 2;
             wpm.innerHTML = wpm.innerHTML + calculate.toString();
             e.target.value = "";
