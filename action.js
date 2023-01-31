@@ -282,45 +282,39 @@ let score = 0;
 let time = 20;
 let totalWPM = 0;
 let timerRoll = false;
-let currentLetter = 0;
 
 
 input.addEventListener("keydown", (e) => {
       let val = e.target.value;
 
-      console.log("TEXTELEMENTS LENGTH", textElements[i].children[0])
-
-      if (e.key === "Backspace") {
-        console.log("clicked")
-        textElements[i].children[0].setAttribute("style", "color:black;")
-      } else
-  
-      if (e.key === textString[i][val.length]) {
-        console.log("KEY", e.key);
-        console.log("Inne", textString[i][val.length])
-        textElements[i].children[0].setAttribute("style", "color:green;")
-      } else {
-        textElements[i].children[0].setAttribute("style", "color:red;")
-      }
-
-  
       if (e.code === "Space") {
         e.target.value = "";
-        console.log("VAL", val);
-        console.log("VAL LENGTH", val.length)
-        console.log("TEXTSTRING", textString[i]);
+        console.log("VAL", val)
+        console.log("INNERHTML", textString[i])
         if (val.trim() === textString[i]) {
           score++;
-          textString[i] = "<span style='color: green'>" + textString[i] + "</span>";
+          textElements[i].setAttribute("style", "color:blue;")
           console.log("CORRECT");
         } else {
-          textString[i] = "<span style='color: red'>" + textString[i] + "</span>";
+            console.log("TEXTEL", textElements[i])
+          textElements[i].setAttribute("style", "color:blue;")
           console.log("FALSE");
         }
-        typeText.innerHTML = textString.join(" ");
+        e.target.value = "";
         i++;
-        val = ""
+      } else {
+        if (e.key === "Backspace") {
+            console.log("clicked")
+            textElements[i].children[val.length -1].setAttribute("style", "color:black;")
+          } else
+          if (e.key === textString[i][val.length]) {
+            textElements[i].children[val.length].setAttribute("style", "color:green;")
+          } else {
+            textElements[i].children[val.length].setAttribute("style", "color:red;")
+          }
+    
       }
+
   
       if (timerRoll) {
       } else {
