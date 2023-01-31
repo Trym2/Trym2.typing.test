@@ -1,9 +1,4 @@
-const typeText = document.getElementById("typetext")
-const input = document.getElementById("input")
-const timer = document.getElementById("timer")
-const wpm = document.getElementById("wpm")
-const resetButton = document.getElementById("resetbutton");
-let wordsWritten = document.getElementById("wordswritten")
+
 
 
 const wordList = [
@@ -253,6 +248,14 @@ const wordList = [
     "your","yourself","youth","zero","zebra","zipper","zoo","zulu"
   ];
 
+  const typeText = document.getElementById("typetext")
+const input = document.getElementById("input")
+const timer = document.getElementById("timer")
+const wpm = document.getElementById("wpm")
+const resetButton = document.getElementById("resetbutton");
+let wordsWritten = document.getElementById("wordswritten")
+let textElements = typeText.getElementsByTagName("span");
+
   let textString;
   const generateText = () => {
     textString = wordList[Math.floor(Math.random() * wordList.length - 1)]
@@ -260,8 +263,16 @@ const wordList = [
         textString = textString + " " + wordList[Math.floor(Math.random() * wordList.length - 1)]
     }
     textString = textString.split(" ")
-    
-    typeText.innerHTML = textString.join(" ")
+    for (let i = 0; i < textString.length; i++) {
+        let fullWord = "";
+
+        for (let k = 0; k < textString[i].length; k++) {
+            fullWord = fullWord + "<letter>" + textString[i][k] + "</letter>"
+        }
+        typeText.innerHTML = typeText.innerHTML + "<span>" + fullWord + "</span>" + " "
+    }
+
+
   }
 
   generateText()
@@ -271,59 +282,65 @@ let score = 0;
 let time = 20;
 let totalWPM = 0;
 let timerRoll = false;
+let currentLetter = 0;
 
 
 input.addEventListener("keydown", (e) => {
-    if (e.target.value.length < 1 || e.target.value === " ") {
-        e.target.value = ""
-    } else {
+      let val = e.target.value;
 
-        let val = e.target.value;
+      console.log("TEXTELEMENTS LENGTH", textElements[i].children[0])
 
-        if (e.code === "Space") {
-            // Your existing code here
+      if (e.key === "Backspace") {
+        console.log("clicked")
+        textElements[i].children[0].setAttribute("style", "color:black;")
+      } else
+  
+      if (e.key === textString[i][val.length]) {
+        console.log("KEY", e.key);
+        console.log("Inne", textString[i][val.length])
+        textElements[i].children[0].setAttribute("style", "color:green;")
+      } else {
+        textElements[i].children[0].setAttribute("style", "color:red;")
+      }
 
-                e.target.value = ""
-                console.log(val)
-                console.log(textString[i])
-                if (val === textString[i]) {
-                   
-                    score++
-                    textString[i] = "<span style='color: green'>" + textString[i] + "</span>"
-                    
-                    console.log("CORRECT")
-                } else {
-                    textString[i] = "<span style='color: red'>" + textString[i] + "</span>"
-                    console.log("FALSE")
-                }
-                typeText.innerHTML = textString.join(" ");
-                i++
-                wordsWritten.innerHTML = wordsWritten.innerHTML + e.target.value
-              
-            
-        }
-
-        if (timerRoll) {
+  
+      if (e.code === "Space") {
+        e.target.value = "";
+        console.log("VAL", val);
+        console.log("VAL LENGTH", val.length)
+        console.log("TEXTSTRING", textString[i]);
+        if (val.trim() === textString[i]) {
+          score++;
+          textString[i] = "<span style='color: green'>" + textString[i] + "</span>";
+          console.log("CORRECT");
         } else {
-            intervalId = setInterval(() => {
-                if (time > 0) {
-                    time = time - 1
-                    timer.innerHTML = time.toString()
-                    console.log("HI")
-                } else {
-                    resetButton.setAttribute("style", "visibility: visible")
-                    clearInterval(intervalId)
-                    console.log("yah")
-                    let calculate = score * 2
-                    wpm.innerHTML = wpm.innerHTML + calculate.toString()
-                    e.target.value = ""  
-                }
-            }, 1000)
+          textString[i] = "<span style='color: red'>" + textString[i] + "</span>";
+          console.log("FALSE");
         }
-    
-        timerRoll = true;
-    }
-})
+        typeText.innerHTML = textString.join(" ");
+        i++;
+        val = ""
+      }
+  
+      if (timerRoll) {
+      } else {
+        intervalId = setInterval(() => {
+          if (time > 0) {
+            time = time - 1;
+            timer.innerHTML = time.toString();
+          } else {
+            resetButton.setAttribute("style", "visibility: visible");
+            clearInterval(intervalId);
+            console.log("yah");
+            let calculate = score * 2;
+            wpm.innerHTML = wpm.innerHTML + calculate.toString();
+            e.target.value = "";
+          }
+        }, 1000);
+      }
+  
+      timerRoll = true;  
+  });
 
 
 
