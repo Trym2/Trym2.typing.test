@@ -252,7 +252,7 @@ const wpm = document.getElementById("wpm")
 const resetButton = document.getElementById("resetbutton");
 let accuracyText = document.getElementById("accuracy")
 let textElements = typeText.getElementsByTagName("span");
-const nigg = document.getElementById("caret")
+const caret = document.getElementById("caret")
 
   let textString;
   const generateText = () => {
@@ -277,7 +277,7 @@ const nigg = document.getElementById("caret")
 
 let i = 0;
 let score = 0;
-let time = 5;
+let time = 100;
 let totalWPM = 0;
 let timerRoll = false;
 let accuracy = 0;
@@ -289,27 +289,60 @@ let accuracy = 0;
 input.addEventListener("keydown", (e) => {
 
       let val = e.target.value;
+    
 
-      const rect = textElements[i].children[val.length].getBoundingClientRect();
-const distanceFromLeft = rect.left;
+      const setCaret = (left) => {
+        caret.style.transition = "left 0.2s ease-in-out";
+        caret.style.left = left + "px";
+      } 
 
-      console.log("wee", distanceFromLeft)
 
       if (e.key === " ") {
+
         e.target.value = ""
         e.preventDefault()
         if (val.trim() === textString[i]) {
           score++;
-          textElements[i].setAttribute("style", "color:blue;")
+          textElements[i].setAttribute("style", "color:green;")
+          for (let k = 0; k < textElements[i].children.length; k++) {
+            textElements[i].children[k].setAttribute("style", "color:grey;")
+          }
           console.log("CORRECT");
         } else {
           accuracy++
-          textElements[i].setAttribute("style", "color:blue;")
+          for (let k = 0; k < textElements[i].children.length; k++) {
+            textElements[i].children[k].setAttribute("style", "color:pink;")
+          }
           console.log("FALSE");
           
         }
         i++;
+        const rect = typeText.children[i].children[0].getBoundingClientRect()
+        setCaret(rect.left)
+        const topper = rect.top;
+        if (topper > 30) {
+        for (let k = 0; k < i; k++) {
+          typeText.children[k].setAttribute("style", "display:none;")
+        }
+          console.log("Conker")
+        }
+
       } else {
+        if (e.key === "Backspace") {
+          const rect = typeText.children[i].children[val.length - 1].getBoundingClientRect()
+          setCaret(rect.left)
+          console.log(rect.left)
+        } else if (val.length +1 >= textElements[i].children.length) {
+          const rect = textElements[i].children[val.length].getBoundingClientRect();
+          setCaret(rect.right)
+        }
+        else {
+          const rect = typeText.children[i].children[val.length + 1].getBoundingClientRect()
+          setCaret(rect.left)
+          console.log(rect.left)
+        }
+
+
         if (e.key === "Backspace") {
             console.log("clicked")
             
@@ -317,7 +350,7 @@ const distanceFromLeft = rect.left;
           }
           if (e.key === textString[i][val.length]) {
             textElements[i].children[val.length].setAttribute("style", "color:green;")
-          } else {
+          } else if (e.key !== "Backspace" && e.key !== textString[i][val.length]) {
             textElements[i].children[val.length].setAttribute("style", "color:red;")
           }
       }
@@ -341,6 +374,7 @@ const distanceFromLeft = rect.left;
       }
   
       timerRoll = true;  
+
   });
 
 

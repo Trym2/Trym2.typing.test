@@ -3,16 +3,10 @@
     height: 20px;
     background-color: black;
     position: absolute;
-    top: 34px;
-    animation: blink 1s step-end infinite;
-  }
-  
-  @keyframes blink {
-    50% {
-      opacity: 0;
-    }
+    top: 31px;
   }
 
-  #hiddenspace {
-    white-space: pre;
+
+  .truncate {
+    width: 1200px;
   }
