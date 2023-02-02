@@ -1,6 +1,3 @@
-
-
-
 const wordList = [
     "ability","able","aboard","about","above","accept","accident","according",
     "account","accurate","acres","across","act","action","active","activity",
@@ -253,13 +250,14 @@ const input = document.getElementById("input")
 const timer = document.getElementById("timer")
 const wpm = document.getElementById("wpm")
 const resetButton = document.getElementById("resetbutton");
-let wordsWritten = document.getElementById("wordswritten")
+let accuracyText = document.getElementById("accuracy")
 let textElements = typeText.getElementsByTagName("span");
+const nigg = document.getElementById("caret")
 
   let textString;
   const generateText = () => {
     textString = wordList[Math.floor(Math.random() * wordList.length - 1)]
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
         textString = textString + " " + wordList[Math.floor(Math.random() * wordList.length - 1)]
     }
     textString = textString.split(" ")
@@ -267,7 +265,7 @@ let textElements = typeText.getElementsByTagName("span");
         let fullWord = "";
 
         for (let k = 0; k < textString[i].length; k++) {
-            fullWord = fullWord + "<letter>" + textString[i][k] + "</letter>"
+            fullWord = fullWord + "<letter style='position:relative;'>" + textString[i][k] + "</letter>"
         }
         typeText.innerHTML = typeText.innerHTML + "<span>" + fullWord + "</span>" + " "
     }
@@ -279,17 +277,23 @@ let textElements = typeText.getElementsByTagName("span");
 
 let i = 0;
 let score = 0;
-let time = 20;
+let time = 5;
 let totalWPM = 0;
 let timerRoll = false;
+let accuracy = 0;
+
+
+
 
 
 input.addEventListener("keydown", (e) => {
 
       let val = e.target.value;
-        console.log(e.key)
 
+      const rect = textElements[i].children[val.length].getBoundingClientRect();
+const distanceFromLeft = rect.left;
 
+      console.log("wee", distanceFromLeft)
 
       if (e.key === " ") {
         e.target.value = ""
@@ -299,13 +303,16 @@ input.addEventListener("keydown", (e) => {
           textElements[i].setAttribute("style", "color:blue;")
           console.log("CORRECT");
         } else {
+          accuracy++
           textElements[i].setAttribute("style", "color:blue;")
           console.log("FALSE");
+          
         }
         i++;
       } else {
         if (e.key === "Backspace") {
             console.log("clicked")
+            
             textElements[i].children[val.length -1].setAttribute("style", "color:black;")
           }
           if (e.key === textString[i][val.length]) {
@@ -315,19 +322,17 @@ input.addEventListener("keydown", (e) => {
           }
       }
     
-      
-
 
       if (timerRoll) {
       } else {
         intervalId = setInterval(() => {
           if (time > 0) {
-            time = time - 1;
+            time--;
             timer.innerHTML = time.toString();
           } else {
             resetButton.setAttribute("style", "visibility: visible");
             clearInterval(intervalId);
-    
+            accuracyText.innerHTML = (score - accuracy) / score * 100; + "%"
             let calculate = score * 2;
             wpm.innerHTML = wpm.innerHTML + calculate.toString();
             e.target.value = "";
@@ -341,12 +346,14 @@ input.addEventListener("keydown", (e) => {
 
 
 resetButton.addEventListener("click", () => {
-    console.log("ye")
      i = 0;
      score = 0;
      time = 5;
      totalWPM = 0;
-     timerRoll = false
+     timerRoll = false;
+     accuracy = 0;
+     typeText.innerHTML = ""
+     textString = ""
      wpm.innerHTML = "Total WPM: "
      input.value = ""
     generateText()
