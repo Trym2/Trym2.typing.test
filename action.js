@@ -254,6 +254,8 @@ let accuracyText = document.getElementById("accuracy")
 let textElements = typeText.getElementsByTagName("span");
 const caret = document.getElementById("caret")
 
+document.getElementById("input").focus()
+
   let textString;
   const generateText = () => {
     textString = wordList[Math.floor(Math.random() * wordList.length - 1)]
@@ -277,14 +279,18 @@ const caret = document.getElementById("caret")
 
 let i = 0;
 let score = 0;
-let time = 100;
+let timeAndCalculation = {
+  timer: 15,
+  calcAmount: 2
+};
 let totalWPM = 0;
 let timerRoll = false;
 let accuracy = 0;
 
+timer.innerHTML = timeAndCalculation.timer
 
-
-
+const textHeight = typeText.children[0].children[0].getBoundingClientRect()
+caret.setAttribute("style", `top: ${textHeight.top + 8}px`)
 
 input.addEventListener("keydown", (e) => {
 
@@ -293,7 +299,7 @@ input.addEventListener("keydown", (e) => {
 
       const setCaret = (left) => {
         caret.style.transition = "left 0.2s ease-in-out";
-        caret.style.left = left + "px";
+        caret.style.left = left - 4 + "px";
       } 
 
 
@@ -305,25 +311,27 @@ input.addEventListener("keydown", (e) => {
           score++;
           textElements[i].setAttribute("style", "color:green;")
           for (let k = 0; k < textElements[i].children.length; k++) {
-            textElements[i].children[k].setAttribute("style", "color:grey;")
+            textElements[i].children[k].setAttribute("style", "color:#119BFF;")
           }
           console.log("CORRECT");
         } else {
           accuracy++
           for (let k = 0; k < textElements[i].children.length; k++) {
-            textElements[i].children[k].setAttribute("style", "color:pink;")
+            textElements[i].children[k].setAttribute("style", "color:#FF4040; text-decoration:underline;")
           }
           console.log("FALSE");
           
         }
+        const prevRect = typeText.children[i].children[0].getBoundingClientRect()
+        const prevHeight = prevRect.top
         i++;
         const rect = typeText.children[i].children[0].getBoundingClientRect()
         setCaret(rect.left)
         const topper = rect.top;
-        if (topper > 30) {
-        for (let k = 0; k < i; k++) {
-          typeText.children[k].setAttribute("style", "display:none;")
-        }
+        if (topper > prevHeight) {
+          for (let k = 0; k < i; k++) {
+            typeText.children[k].setAttribute("style", "display:none; transform 2.0s ease-in-out;")
+          }
           console.log("Conker")
         }
 
@@ -346,12 +354,12 @@ input.addEventListener("keydown", (e) => {
         if (e.key === "Backspace") {
             console.log("clicked")
             
-            textElements[i].children[val.length -1].setAttribute("style", "color:black;")
+            textElements[i].children[val.length -1].setAttribute("style", "color:#4A4A4A;")
           }
           if (e.key === textString[i][val.length]) {
-            textElements[i].children[val.length].setAttribute("style", "color:green;")
+            textElements[i].children[val.length].setAttribute("style", "color:#119BFF;")
           } else if (e.key !== "Backspace" && e.key !== textString[i][val.length]) {
-            textElements[i].children[val.length].setAttribute("style", "color:red;")
+            textElements[i].children[val.length].setAttribute("style", "color:#FF4040;")
           }
       }
     
@@ -359,13 +367,18 @@ input.addEventListener("keydown", (e) => {
       if (timerRoll) {
       } else {
         intervalId = setInterval(() => {
-          if (time > 0) {
-            time--;
-            timer.innerHTML = time.toString();
+          if (timeAndCalculation.timer > 0) {
+            timeAndCalculation.timer--;
+            timer.innerHTML = timeAndCalculation.timer.toString();
           } else {
+            input.setAttribute("disabled", "true")
             resetButton.setAttribute("style", "visibility: visible");
             clearInterval(intervalId);
-            accuracyText.innerHTML = (score - accuracy) / score * 100; + "%"
+            console.log("CORRECT MAOIUNT", score)
+            console.log("MISSED", accuracy)
+            let accuracyCalculation = (score / (score + accuracy)) * 100;
+            
+            accuracyText.innerHTML = Math.ceil(accuracyCalculation) + "%"
             let calculate = score * 2;
             wpm.innerHTML = wpm.innerHTML + calculate.toString();
             e.target.value = "";
@@ -382,7 +395,7 @@ input.addEventListener("keydown", (e) => {
 resetButton.addEventListener("click", () => {
      i = 0;
      score = 0;
-     time = 5;
+     timeAndCalculation.timer = 5;
      totalWPM = 0;
      timerRoll = false;
      accuracy = 0;
@@ -390,6 +403,9 @@ resetButton.addEventListener("click", () => {
      textString = ""
      wpm.innerHTML = "Total WPM: "
      input.value = ""
+     input.removeAttribute("disabled")
+     document.querySelector('input').focus()
+     caret.setAttribute("style", `top: ${textHeight.top + 8}px`)
     generateText()
 })
 

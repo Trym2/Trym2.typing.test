@@ -1,12 +1,45 @@
+html {
+    font-family: 'Inter', sans-serif;
+    color: #4A4A4A
+}
+
+body {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.outline {
+    margin-top: 30vh !important;
+}
+
+a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none
+}
+
+a:visited {
+    color: black;
+}
+
+#typetext {
+    letter-spacing: 2px;
+}
+
 #caret {
-    width: 2px;
-    height: 20px;
-    background-color: black;
+    font-size: 20px;
     position: absolute;
     top: 31px;
   }
 
 
   .truncate {
-    width: 1200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+            line-clamp: 2; 
+    -webkit-box-orient: vertical;
   }
