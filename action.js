@@ -253,6 +253,8 @@ const resetButton = document.getElementById("resetbutton");
 let accuracyText = document.getElementById("accuracy")
 let textElements = typeText.getElementsByTagName("span");
 const caret = document.getElementById("caret")
+const timer2 = document.getElementById("timer2")
+const timer3 = document.getElementById("timer3")
 
 document.getElementById("input").focus()
 
@@ -271,17 +273,50 @@ document.getElementById("input").focus()
         }
         typeText.innerHTML = typeText.innerHTML + "<span>" + fullWord + "</span>" + " "
     }
-
-
   }
 
   generateText()
+
+  const setTimer = (time, calc) => {
+    timeAndCalculation.timer = time;
+    timeAndCalculation.calcAmount = calc;
+  }
+
+  const styleChecker = (selectedTimer) => {
+    timer.classList.remove("selected")
+    timer2.classList.remove("selected")
+    timer3.classList.remove("selected")
+
+    selectedTimer.classList.add("selected")
+  }
+
+  timer.addEventListener("click", () => {
+    if (!timerRoll) {
+      setTimer(15, 4)
+
+      styleChecker(timer)
+    }
+  })
+
+  timer2.addEventListener("click", () => {
+    if (!timerRoll) {
+      setTimer(30, 2)
+      styleChecker(timer2)
+    }
+  })
+
+  timer3.addEventListener("click", () => {
+    if (!timerRoll) {
+      setTimer(60, 1)
+      styleChecker(timer3)
+    }
+  })
 
 let i = 0;
 let score = 0;
 let timeAndCalculation = {
   timer: 15,
-  calcAmount: 2
+  calcAmount: 4
 };
 let totalWPM = 0;
 let timerRoll = false;
@@ -369,19 +404,41 @@ input.addEventListener("keydown", (e) => {
         intervalId = setInterval(() => {
           if (timeAndCalculation.timer > 0) {
             timeAndCalculation.timer--;
-            timer.innerHTML = timeAndCalculation.timer.toString();
+            if (timer.classList.contains("selected")) {
+              timer.innerHTML = timeAndCalculation.timer.toString();
+            }
+            if (timer2.classList.contains("selected")) {
+              timer2.innerHTML = timeAndCalculation.timer.toString();
+            }
+            if (timer3.classList.contains("selected")) {
+              timer3.innerHTML = timeAndCalculation.timer.toString();
+            }
           } else {
+
+
+            const generateScoreText = (text, icon) => {
+              return `<div style="align-items: center;  display:flex; flex-direction:row; gap: 12px;"> <div style="border-style:solid;width:34px;height:34px;  align-items: center;
+              display: flex;
+              justify-content: center; border-color:#4A4A4A; border-radius:10px; font-size:16px; border-width:thin;"><span style="display: inline-block;
+              vertical-align: middle;
+              text-align: center; font-semibold">${icon}</span></div> <p
+              style="font-size:16px;">${text}</p>   </div>`
+            }
+
             input.setAttribute("disabled", "true")
             resetButton.setAttribute("style", "visibility: visible");
             clearInterval(intervalId);
-            console.log("CORRECT MAOIUNT", score)
-            console.log("MISSED", accuracy)
             let accuracyCalculation = (score / (score + accuracy)) * 100;
-            
-            accuracyText.innerHTML = Math.ceil(accuracyCalculation) + "%"
             let calculate = score * 2;
-            wpm.innerHTML = wpm.innerHTML + calculate.toString();
+            accuracyText.innerHTML = generateScoreText("Accuracy: " + Math.ceil(accuracyCalculation) + "%", "%")
+            wpm.innerHTML = generateScoreText(`Words per minute: ${calculate.toString()}`, "<img src='icons/more.svg' width='18' height='18'>");
+            resetButton.innerHTML = generateScoreText("Try again", "<img src='icons/back.svg' width='18' height='18'>")
             e.target.value = "";
+            timerRoll = false;
+            timer.innerHTML = "15"
+            timer2.innerHTML = "30"
+                 timer3.innerHTML = "60"
+
           }
         }, 1000);
       }
@@ -389,6 +446,7 @@ input.addEventListener("keydown", (e) => {
       timerRoll = true;  
 
   });
+
 
 
 
@@ -401,12 +459,26 @@ resetButton.addEventListener("click", () => {
      accuracy = 0;
      typeText.innerHTML = ""
      textString = ""
-     wpm.innerHTML = "Total WPM: "
+     wpm.innerHTML = ""
+     accuracyText.innerHTML = ""
+     resetButton.innerHTML = ""
      input.value = ""
      input.removeAttribute("disabled")
+     if (timer.classList.contains("selected")) {
+      setTimer(60, 1)
+     } else if (timer2.classList.contains("selected")) {
+      setTimer(30, 2)
+     } else {
+      setTimer(15, 4)
+     }
      document.querySelector('input').focus()
      caret.setAttribute("style", `top: ${textHeight.top + 8}px`)
     generateText()
 })
 
+
+document.querySelector("input").addEventListener("blur", function(event) {
+  event.preventDefault();
+  this.focus();
+}); 
 

@@ -12,26 +12,26 @@
     <link rel="stylesheet" href="styles.css" type="text/css"/>
 </head>
 <body>
-    <nav>
+    <nav style="margin-top:24px;">
        <a href="https://github.com/Trym2"><img src="icons/Vector (3).png" width="24" height="24" alt="Githubs ikon"> <p>Trym Foss</p></a>
     </nav>
+    <input id="input" type="text" autofocus autocomplete="off" style="opacity: 0;"/>
     <div class="outline">
-        <h1 id="timer"></h1>
+        <div id="timers">
+            <button id="timer" class="selected">15</button>
+            <button id="timer2">30</button>
+            <button id="timer3">60</button>
+        </div>
         <div class="truncate">
             <span  id="caret" >|</span>
             <h1 id="typetext"></h1>
         </div>
-    </div>
-    <input id="input" type="text" autofocus autocomplete="off" style="opacity: 0;"/>
-    <h1 id="wpm"></h1>
-    <button id="resetbutton" style="visibility: hidden;">Reset</button>
-    <h1 id="accuracy"></h1>      
-    <script>
-        document.getElementById("input").focus();
-      </script>
+        <h1 id="wpm"></h1>
+        <h1 id="accuracy"></h1>
+        <div id="resetbutton" style="visibility:hidden;"></div>   
+    </div>   
+
     <script src="action.js"></script>
-    <script>
-        document.getElementById("input").focus();
-      </script>
+
 </body>
 </html>

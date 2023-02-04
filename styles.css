@@ -12,6 +12,34 @@ body {
     margin-top: 30vh !important;
 }
 
+#timers {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    color: #4A4A4A;
+}
+
+.selected {
+    color: #119BFF;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+    color: #4A4A4A;
+    font-weight: 600;
+}
+
+button:hover {
+    cursor:pointer;
+}
+
+h1 {
+    margin: 0;
+}
+
 a {
     display: flex;
     flex-direction: row;
@@ -36,10 +64,29 @@ a:visited {
 
 
   .truncate {
+    margin: 40px 0;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* number of lines to show */
             line-clamp: 2; 
     -webkit-box-orient: vertical;
+  }
+
+  #resetbutton:hover {
+    cursor:pointer;
+  }
+
+  @media only screen and (max-width: 600px) {
+    body {
+      margin: 0 24px;
+    }
+
+    #typetext {
+        font-size: 18px;
+    }
+
+    #caret {
+        font-size: 10px;
+    }
   }
