@@ -465,11 +465,11 @@ resetButton.addEventListener("click", () => {
      input.value = ""
      input.removeAttribute("disabled")
      if (timer.classList.contains("selected")) {
-      setTimer(60, 1)
+      setTimer(15, 4)
      } else if (timer2.classList.contains("selected")) {
       setTimer(30, 2)
      } else {
-      setTimer(15, 4)
+      setTimer(60, 1)
      }
      document.querySelector('input').focus()
      caret.setAttribute("style", `top: ${textHeight.top + 8}px`)
