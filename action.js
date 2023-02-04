@@ -429,7 +429,7 @@ input.addEventListener("keydown", (e) => {
             resetButton.setAttribute("style", "visibility: visible");
             clearInterval(intervalId);
             let accuracyCalculation = (score / (score + accuracy)) * 100;
-            let calculate = score * 2;
+            let calculate = score * timeAndCalculation.calcAmount;
             accuracyText.innerHTML = generateScoreText("Accuracy: " + Math.ceil(accuracyCalculation) + "%", "%")
             wpm.innerHTML = generateScoreText(`Words per minute: ${calculate.toString()}`, "<img src='icons/more.svg' width='18' height='18'>");
             resetButton.innerHTML = generateScoreText("Try again", "<img src='icons/back.svg' width='18' height='18'>")
