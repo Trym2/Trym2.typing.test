@@ -327,8 +327,8 @@ timer.innerHTML = timeAndCalculation.timer
 const textHeight = typeText.children[0].children[0].getBoundingClientRect()
 caret.setAttribute("style", `top: ${textHeight.top + 8}px`)
 const availableChars = [ "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-input.addEventListener("keydown", (e) => {
-  if (e.key.match(/^[a-zA-Z]+$/) /*|| e.key === " "*/) {
+/*input.addEventListener("input", (e) => {
+
     
  
       let val = e.target.value;
@@ -343,7 +343,7 @@ input.addEventListener("keydown", (e) => {
 
 
       if (e.key === " ") {
-
+        console.log("HM1")
         e.target.value = ""
         e.preventDefault()
         if (val.toLowerCase().trim() === textString[i]) {
@@ -373,17 +373,21 @@ input.addEventListener("keydown", (e) => {
           }
           console.log("Conker")
         }
-
+        console.log("HM2")
       } else {
+        console.log("HM3")
         if (e.key === "Backspace") {
+          console.log("HM4")
           const rect = typeText.children[i].children[val.length - 1].getBoundingClientRect()
           setCaret(rect.left)
           console.log(rect.left)
         } else if (val.length +1 >= textElements[i].children.length) {
           const rect = textElements[i].children[val.length].getBoundingClientRect();
           setCaret(rect.right)
+          console.log("HM5")
         }
         else {
+          console.log("HM6")
           const rect = typeText.children[i].children[val.length + 1].getBoundingClientRect()
           setCaret(rect.left)
           console.log(rect.left)
@@ -396,8 +400,12 @@ input.addEventListener("keydown", (e) => {
             textElements[i].children[val.length -1].setAttribute("style", "color:#4A4A4A;")
           }
           if (e.key === textString[i][val.length]) {
+            console.log("HM7")
             textElements[i].children[val.length].setAttribute("style", "color:#119BFF;")
-          } else if (e.key !== "Backspace" && e.key !== textString[i][val.length]) {
+          } else if (e.key !== "Backspace" && e.target.value[val.length - 1] !== textString[i][val.length - 1]) {
+            console.log("HM8")
+            console.log(textString[i][val.length], "STRING")
+            console.log("KEY", e.target.value)
             textElements[i].children[val.length].setAttribute("style", "color:#FF4040;")
           }
       }
@@ -448,8 +456,137 @@ input.addEventListener("keydown", (e) => {
       }
   
       timerRoll = true;  
+    
+  }); */
+
+  input.addEventListener("input", (e) => {
+    const val = e.target.value;
+    const currentLength = e.target.value.length - 1
+    console.log("VAALLALAL", val)
+
+
+    const setCaret = (left) => {
+      caret.style.transition = "left 0.2s ease-in-out";
+      caret.style.left = left - 4 + "px";
+    } 
+
+
+    if (e.target.value[currentLength] === " ") {
+      console.log("HM1")
+      e.target.value = ""
+      e.preventDefault()
+      if (val.toLowerCase().trim() === textString[i]) {
+        score++;
+        textElements[i].setAttribute("style", "color:green;")
+        for (let k = 0; k < textElements[i].children.length; k++) {
+          textElements[i].children[k].setAttribute("style", "color:#119BFF;")
+        }
+        console.log("CORRECT");
+      } else {
+        accuracy++
+        for (let k = 0; k < textElements[i].children.length; k++) {
+          textElements[i].children[k].setAttribute("style", "color:#FF4040; text-decoration:underline;")
+        }
+        console.log("FALSE");
+        
+      }
+      const prevRect = typeText.children[i].children[0].getBoundingClientRect()
+      const prevHeight = prevRect.top
+      i++;
+      const rect = typeText.children[i].children[0].getBoundingClientRect()
+      setCaret(rect.left)
+      const topper = rect.top;
+      if (topper > prevHeight) {
+        for (let k = 0; k < i; k++) {
+          typeText.children[k].setAttribute("style", "display:none; transform 2.0s ease-in-out;")
+        }
+        console.log("Conker")
+      }
+      console.log("HM2")
+    } else {
+      console.log("HM3")
+      if (e.key === "Backspace") {
+        console.log("HM4")
+        const rect = typeText.children[i].children[val.length - 1].getBoundingClientRect()
+        setCaret(rect.left)
+        console.log(rect.left)
+      } else if (val.length +1 >= textElements[i].children.length) {
+        console.log("CHECK", textElements[i])
+        const rect = textElements[i].children[currentLength].getBoundingClientRect();
+        setCaret(rect.right)
+        console.log("HM5")
+      }
+      else {
+        console.log("HM6")
+        const rect = typeText.children[i].children[currentLength + 1].getBoundingClientRect()
+        setCaret(rect.left)
+        console.log(rect.left)
+      }
     }
-  });
+
+
+   
+    if (val === "Backspace") {
+      console.log("WHAT")
+      textElements[i].children[currentLength].setAttribute("style", "color:pink;")
+    }
+    if (val[currentLength] === textString[i][currentLength]) {
+      console.log("the")
+      textElements[i].children[currentLength].setAttribute("style", "color:#119BFF;")
+    } else if (val[currentLength] !== "Backspace" && val[currentLength] !== " " && val[currentLength] !== textString[i][currentLength]) {
+      console.log("frikk")
+      textElements[i].children[currentLength].setAttribute("style", "color:#FF4040;")
+    }
+
+
+    
+    if (timerRoll) {
+    } else {
+      intervalId = setInterval(() => {
+        if (timeAndCalculation.timer > 0) {
+          timeAndCalculation.timer--;
+          if (timer.classList.contains("selected")) {
+            timer.innerHTML = timeAndCalculation.timer.toString();
+          }
+          if (timer2.classList.contains("selected")) {
+            timer2.innerHTML = timeAndCalculation.timer.toString();
+          }
+          if (timer3.classList.contains("selected")) {
+            timer3.innerHTML = timeAndCalculation.timer.toString();
+          }
+        } else {
+
+
+          const generateScoreText = (text, icon) => {
+            return `<div style="align-items: center;  display:flex; flex-direction:row; gap: 12px;"> <div style="border-style:solid;width:34px;height:34px;  align-items: center;
+            display: flex;
+            justify-content: center; border-color:#4A4A4A; border-radius:10px; font-size:16px; border-width:thin;"><span style="display: inline-block;
+            vertical-align: middle;
+            text-align: center; font-semibold">${icon}</span></div> <p
+            style="font-size:16px;">${text}</p>   </div>`
+          }
+
+          input.setAttribute("disabled", "true")
+          resetButton.setAttribute("style", "visibility: visible");
+          clearInterval(intervalId);
+          let accuracyCalculation = (score / (score + accuracy)) * 100;
+          let calculate = score * timeAndCalculation.calcAmount;
+          accuracyText.innerHTML = generateScoreText("Accuracy: " + Math.ceil(accuracyCalculation) + "%", "%")
+          wpm.innerHTML = generateScoreText(`Words per minute: ${calculate.toString()}`, "<img src='icons/more.svg' width='18' height='18'>");
+          resetButton.innerHTML = generateScoreText("Try again", "<img src='icons/back.svg' width='18' height='18'>")
+          e.target.value = "";
+          timerRoll = false;
+          timer.innerHTML = "15"
+          timer2.innerHTML = "30"
+               timer3.innerHTML = "60"
+
+        }
+      }, 1000);
+    }
+
+    timerRoll = true;  
+  
+  })
 
 
 
