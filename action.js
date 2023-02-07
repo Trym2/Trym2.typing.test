@@ -342,7 +342,7 @@ input.addEventListener("keydown", (e) => {
 
         e.target.value = ""
         e.preventDefault()
-        if (val.trim() === textString[i]) {
+        if (val.toLowerCase().trim() === textString[i]) {
           score++;
           textElements[i].setAttribute("style", "color:green;")
           for (let k = 0; k < textElements[i].children.length; k++) {
