@@ -477,8 +477,8 @@ resetButton.addEventListener("click", () => {
 })
 
 
-document.querySelector("input").addEventListener("blur", function(event) {
+/*document.querySelector("input").addEventListener("blur", function(event) {
   event.preventDefault();
   this.focus();
-}); 
+});  */
 
