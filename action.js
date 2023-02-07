@@ -256,7 +256,7 @@ const caret = document.getElementById("caret")
 const timer2 = document.getElementById("timer2")
 const timer3 = document.getElementById("timer3")
 
-//document.getElementById("input").focus()
+document.getElementById("input").focus()
 
   let textString;
   const generateText = () => {
@@ -326,9 +326,14 @@ timer.innerHTML = timeAndCalculation.timer
 
 const textHeight = typeText.children[0].children[0].getBoundingClientRect()
 caret.setAttribute("style", `top: ${textHeight.top + 8}px`)
-
+const availableChars = [ "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 input.addEventListener("keydown", (e) => {
+  if (e.key.match(/^[a-zA-Z]+$/) /*|| e.key === " "*/) {
+    
+ 
       let val = e.target.value;
+
+      console.log("WTFF", val)
     
 
       const setCaret = (left) => {
@@ -397,7 +402,6 @@ input.addEventListener("keydown", (e) => {
           }
       }
     
-      alert(e.target.value)
 
       if (timerRoll) {
       } else {
@@ -444,7 +448,7 @@ input.addEventListener("keydown", (e) => {
       }
   
       timerRoll = true;  
-
+    }
   });
 
 
