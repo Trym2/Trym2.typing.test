@@ -256,7 +256,7 @@ const caret = document.getElementById("caret")
 const timer2 = document.getElementById("timer2")
 const timer3 = document.getElementById("timer3")
 
-document.getElementById("input").focus()
+//document.getElementById("input").focus()
 
   let textString;
   const generateText = () => {
@@ -328,7 +328,6 @@ const textHeight = typeText.children[0].children[0].getBoundingClientRect()
 caret.setAttribute("style", `top: ${textHeight.top + 8}px`)
 
 input.addEventListener("keydown", (e) => {
-  alert(e.target.value)
       let val = e.target.value;
     
 
@@ -398,6 +397,7 @@ input.addEventListener("keydown", (e) => {
           }
       }
     
+      alert(e.target.value)
 
       if (timerRoll) {
       } else {
@@ -477,8 +477,8 @@ resetButton.addEventListener("click", () => {
 })
 
 
-/*document.querySelector("input").addEventListener("blur", function(event) {
+document.querySelector("input").addEventListener("blur", function(event) {
   event.preventDefault();
   this.focus();
-});  */
+});  
 
