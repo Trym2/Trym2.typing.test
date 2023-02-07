@@ -328,7 +328,7 @@ const textHeight = typeText.children[0].children[0].getBoundingClientRect()
 caret.setAttribute("style", `top: ${textHeight.top + 8}px`)
 
 input.addEventListener("keydown", (e) => {
-
+  alert(e.target.value)
       let val = e.target.value;
     
 
